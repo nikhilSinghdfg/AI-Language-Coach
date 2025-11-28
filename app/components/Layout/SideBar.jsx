@@ -2,16 +2,57 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { FaHome } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { MdOutlineMessage } from "react-icons/md";
 import { FaRobot } from "react-icons/fa6";
 import { FaChartBar } from "react-icons/fa";
+import { useAppContext } from '../../Context/UserContext';
+import api from '../../../utils/api';
+import toast from "react-hot-toast";
 
 
 function SideBar() {
+
+  const { setIsLogin, setUserData } = useAppContext();
+
+  const LogoutFun = async (e) => {
+    e.preventDefault()
+    try {
+      api.post('/api/users/logout')
+      setIsLogin(false)
+      setUserData(null)
+      toast.success("Logout Successfull")
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Logout failed ⚠️ Try again");
+
+    }
+  }
+
+
+  const deltedfun=async (e)=> {
+     e.preventDefault()
+     try {
+      api.delete('/api/users/profile')
+       setIsLogin(false)
+      setUserData(null)
+      toast.success("delete Successfull")
+     } catch (error) {
+       console.log(error);
+      toast.error(error.response?.data?.message || "delete account failed ⚠️ Try again");
+
+     }
+  }
+
+
+
+
+
+
+
+
   return (
     <>
 
@@ -55,7 +96,7 @@ function SideBar() {
 
             <div className=' h-12 rounded-2xl hover:bg-gray-200 transition-all duration-200 cursor-pointer flex  items-center '>
               <Link href="/pages/Setting" className="font-semibold text-gray-900 hover:text-blue-500 transition-colors duration-200 flex flex-row items-center gap-2">
-                <IoMdSettings /> Setting
+                <IoMdSettings /> Setting <button onClick={deltedfun}>delete account</button>
               </Link>
             </div>
 
@@ -64,9 +105,11 @@ function SideBar() {
 
           <div className='mt-55 ml-3 h-12 pl-2 rounded-2xl hover:bg-gray-200 transition-all duration-200 cursor-pointer flex  items-center '>
             <Link href="/pages/Logout" className="font-semibold text-gray-900 hover:text-blue-500 transition-colors duration-200 flex flex-row items-center gap-2">
-              <FiLogOut /> Logout
+              <FiLogOut /> <button onClick={LogoutFun}>Logout</button>
             </Link>
           </div>
+
+           
 
 
 

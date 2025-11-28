@@ -9,7 +9,12 @@ import { useAppContext } from '../../Context/UserContext.js';
 
 function Dashboard() {
 
-  const { isLogin } = useAppContext();
+  const { isLogin, loading } = useAppContext();
+
+
+  if (loading) {
+    return <div className='w-screen h-screen flex items-center justify-center font-semibold text-2xl '>Loading...</div>; // Show nothing or skeleton
+  }
 
   return (
     <div className="flex">

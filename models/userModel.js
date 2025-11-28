@@ -6,19 +6,19 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        unique: true
+
     },
     email: {
         type: String,
         required: true,
         trim: true,
-        unique: true
+
     },
     password: {
         type: String,
         required: true,
         trim: true,
-        unique: true
+
     },
     isVerify: {
         type: Boolean,
@@ -37,4 +37,4 @@ const UserSchema = new mongoose.Schema({
 
 })
 
-export const User=mongoose.models.users || mongoose.model("users",UserSchema)
+export const User = mongoose.models.users || mongoose.model("users", UserSchema)

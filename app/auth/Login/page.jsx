@@ -41,9 +41,6 @@ export default function Login() {
       setIsLogin(true)
 
 
-      localStorage.setItem("userData", JSON.stringify(res.data.user))
-      localStorage.setItem("isLogin", "true");
-
       router.push("/pages/Dashboard");
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed ⚠️ Try again");

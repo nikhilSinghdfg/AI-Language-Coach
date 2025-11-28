@@ -1,8 +1,11 @@
+// utils/api.js
 import axios from "axios";
 
-const api=axios.create({
-    baseURL:process.env.NEXT_PUBLIC_BACKEND_URL,
-    withCredentials:true
-})
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  withCredentials: true, // send cookies
+});
 
-export default api
+
+
+export default api;

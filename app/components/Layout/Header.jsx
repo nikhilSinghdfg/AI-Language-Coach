@@ -6,8 +6,11 @@ import { useAppContext } from '../../Context/UserContext';
 
 
 function Header() {
-  const { isLogin, userData } = useAppContext();
+  const { isLogin, userData, loading } = useAppContext();
 
+  if (loading) {
+  return <div></div>; // Show nothing or skeleton
+}
   return (
     <header
       className={`fixed top-0 ${isLogin ? 'left-64 w-[calc(100%-16rem)]' : 'left-0 w-full'
@@ -26,7 +29,7 @@ function Header() {
           <>
             <div className="mt-8 mb-6">
               <h1 className="text-xl font-medium text-gray-800 tracking-tight">
-                Welcome back, <span className="font-semibold text-blue-600">{userData?.username?.split(" ")[0]}</span>
+                Welcome back, <span className="font-semibold text-blue-600">{userData?.username?.split(" ")[0].toUpperCase()}</span>
               </h1>
               <p className="text-sm text-gray-500 mt-1">
                 Here’s your overview
