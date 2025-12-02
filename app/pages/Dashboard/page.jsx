@@ -29,7 +29,7 @@ function Dashboard() {
         {isLogin ?
           (
             <>
-              <main className={`mt-16 w-full h-screen p-4 pl-64 `}>
+              <main className={`mt-16 w-full h-screen p-4 ml-32 `}>
                 <main className="max-w-7xl mx-auto px-6 py-16 sm:py-24">
                   <section className="flex flex-col-reverse lg:flex-row items-center gap-16">
                     {/* Text Section */}

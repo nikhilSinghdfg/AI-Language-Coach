@@ -121,7 +121,7 @@ export async function POST(req) {
 
     // 4️⃣ Prepare token payload
     const tokenData = {
-      id: user._id,
+      _id: user._id,
       username: user.username,
       email: user.email,
     };

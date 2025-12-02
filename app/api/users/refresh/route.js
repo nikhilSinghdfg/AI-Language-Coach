@@ -14,7 +14,11 @@ export async function GET(req) {
 
         const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-        const decodedData = { id: decoded._id, email: decoded.email, username: decoded.username }
+        const decodedData = {
+            _id: decoded._id,
+            email: decoded.email,
+            username: decoded.username
+        }
 
         const newAccessToken = jwt.sign(
             decodedData,   // keep minimal data

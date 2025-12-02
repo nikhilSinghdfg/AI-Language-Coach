@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { FaHome } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
@@ -9,113 +9,99 @@ import { MdOutlineMessage } from "react-icons/md";
 import { FaRobot } from "react-icons/fa6";
 import { FaChartBar } from "react-icons/fa";
 import { useAppContext } from '../../Context/UserContext';
-import api from '../../../utils/api';
 import toast from "react-hot-toast";
-
+import useAuthFetch from '../../../utils/useAuthFetch';
+import { useRouter } from "next/navigation";
+import {useThemeContext} from '../../Context/ThemeContext';
 
 function SideBar() {
-
   const { setIsLogin, setUserData } = useAppContext();
+  const { theme } = useThemeContext();
+
+  const { authFetch } = useAuthFetch();
+  const router = useRouter();
 
   const LogoutFun = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      api.post('/api/users/logout')
-      setIsLogin(false)
-      setUserData(null)
-      toast.success("Logout Successfull")
+      await authFetch({ url: '/api/users/logout', method: 'post' });
+      setIsLogin(false);
+      setUserData(null);
+      toast.success("Logout Successful");
+      router.push("/pages/Dashboard");
     } catch (error) {
-      console.log(error);
       toast.error(error.response?.data?.message || "Logout failed ⚠️ Try again");
-
     }
-  }
+  };
 
-
-  const deltedfun=async (e)=> {
-     e.preventDefault()
-     try {
-      api.delete('/api/users/profile')
-       setIsLogin(false)
-      setUserData(null)
-      toast.success("delete Successfull")
-     } catch (error) {
-       console.log(error);
-      toast.error(error.response?.data?.message || "delete account failed ⚠️ Try again");
-
-     }
-  }
-
-
-
-
-
-
-
+  const menuItems = [
+    { name: "Dashboard", icon: <FaHome />, link: "/pages/Dashboard" },
+    { name: "Practice", icon: <FaRobot />, link: "/pages/Conversation" },
+    { name: "Chat History", icon: <MdOutlineMessage />, link: "/pages/ChatHistory" },
+    { name: "Insights", icon: <FaChartBar />, link: "/pages/Report" },
+    { name: "Settings", icon: <IoMdSettings />, link: "/pages/Setting" },
+  ];
 
   return (
-    <>
+    <div
+      className={`
+        fixed top-0 left-0 h-screen w-64 z-50 flex flex-col justify-between border-r shadow-md
+        ${theme ? "bg-gray-900 border-gray-700 text-white" : "bg-gray-100 border-gray-200 text-black"}
+      `}
+    >
 
-      <div className={`fixed  top-0 left-0 h-[93vh]  border-b  w-64 bg-gray-50  z-50  }`} >
-
-        <nav className='flex flex-col gap-5 justify-around '>
-
-
-          <div className='flex items-center h-16 border-b border-blue-100 justify-center'>
-            <Link href="/pages/Dashboard">
-              <img src="/I.jpg" alt="logo" className="h-13 w-auto cursor-pointer" />
-            </Link>
-          </div>
-
-          <div className="flex flex-col gap-6 pt-5 pl-4 ">
-
-            <div className=' h-10 rounded-2xl hover:bg-gray-200 transition-all duration-200 cursor-pointer flex  items-center '>
-              <Link href="/pages/ChatHistory" className="font-semibold text-gray-900 hover:text-blue-500 transition-colors duration-200 flex flex-row items-center gap-2">
-                <MdOutlineMessage /> ChatHistory
-              </Link>
-            </div>
-
-            <div className=' h-12 rounded-2xl hover:bg-gray-200 transition-all duration-200 cursor-pointer flex  items-center '>
-              <Link href="/pages/Conversation" className="font-semibold text-gray-900 hover:text-blue-500 transition-colors duration-200 flex flex-row items-center gap-2">
-                <FaRobot /> practice
-              </Link>
-            </div>
-
-            <div className=' h-12  rounded-2xl hover:bg-gray-200 transition-all duration-200 cursor-pointer flex  items-center '>
-              <Link href="/pages/Dashboard" className="font-semibold text-gray-900 hover:text-blue-500 transition-colors duration-200 flex flex-row items-center gap-2">
-                <FaHome /> Dashboard
-              </Link>
-            </div>
-
-            <div className=' h-12 rounded-2xl hover:bg-gray-200 transition-all duration-200 cursor-pointer flex  items-center '>
-              <Link href="/pages/Report" className="font-semibold text-gray-900 hover:text-blue-500 transition-colors duration-200 flex flex-row items-center gap-2">
-                <FaChartBar /> Insights
-              </Link>
-
-            </div>
-
-            <div className=' h-12 rounded-2xl hover:bg-gray-200 transition-all duration-200 cursor-pointer flex  items-center '>
-              <Link href="/pages/Setting" className="font-semibold text-gray-900 hover:text-blue-500 transition-colors duration-200 flex flex-row items-center gap-2">
-                <IoMdSettings /> Setting <button onClick={deltedfun}>delete account</button>
-              </Link>
-            </div>
-
-          </div>
-
-
-          <div className='mt-55 ml-3 h-12 pl-2 rounded-2xl hover:bg-gray-200 transition-all duration-200 cursor-pointer flex  items-center '>
-            <Link href="/pages/Logout" className="font-semibold text-gray-900 hover:text-blue-500 transition-colors duration-200 flex flex-row items-center gap-2">
-              <FiLogOut /> <button onClick={LogoutFun}>Logout</button>
-            </Link>
-          </div>
-
-           
-
-
-
-        </nav>
+      {/* Logo */}
+      <div
+        className={`
+          h-16 flex items-center justify-center border-b
+          ${theme ? "border-gray-700" : "border-gray-200"}
+        `}
+      >
+        <Link href="/pages/Dashboard">
+          <img src="/I.jpg" alt="logo" className="h-14 w-auto cursor-pointer" />
+        </Link>
       </div>
-    </>
+
+      {/* Menu Items */}
+      <nav className="flex-1 flex flex-col justify-between mt-4 px-2">
+        <div className="flex flex-col gap-9">
+          {menuItems.map((item, index) => (
+            <div key={index} className="group relative">
+              <Link
+                href={item.link}
+                className={`
+                  flex items-center gap-3 px-4 py-3 rounded-xl font-medium w-full transition-colors duration-200
+                  ${theme
+                    ? "text-gray-300 hover:bg-gray-800 hover:text-white"
+                    : "text-gray-800 hover:bg-blue-50 hover:text-blue-600"
+                  }
+                `}
+              >
+                {item.icon}
+                <span className="flex-1">{item.name}</span>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </nav>
+
+      {/* Logout Button */}
+      <div className="mb-6 px-4">
+        <button
+          onClick={LogoutFun}
+          className={`
+            w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-colors duration-200
+            ${theme
+              ? "bg-red-900/30 text-red-300 hover:bg-red-800 hover:text-white"
+              : "bg-red-50 text-red-700 hover:bg-red-100"
+            }
+          `}
+        >
+          <FiLogOut /> Logout
+        </button>
+      </div>
+
+    </div>
   );
 }
 
