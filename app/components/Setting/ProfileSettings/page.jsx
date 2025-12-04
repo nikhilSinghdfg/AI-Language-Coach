@@ -14,14 +14,14 @@ import { MdEmail } from "react-icons/md";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
-import { useThemeContext } from '../../../Context/ThemeContext.js'; 
+import { useThemeContext } from '../../../Context/ThemeContext.js';
 
 function ProfileSettings() {
   const { isLogin, setIsLogin, setUserData } = useAppContext();
   const { theme } = useThemeContext();
-  
+
   const { authFetch } = useAuthFetch();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState(null)
   const router = useRouter();
 
@@ -42,7 +42,7 @@ function ProfileSettings() {
     e.preventDefault();
     if (!confirm("⚠️ Are you sure you want to permanently delete your account? This action cannot be undone.")) return;
     try {
-      await authFetch({ url: '/api/users/profile', method: 'delete' });
+      await authFetch({ url: '/api/users/delete', method: 'delete' });
       setIsLogin(false);
       setUserData(null);
       toast.success("Account deleted successfully");
@@ -53,22 +53,25 @@ function ProfileSettings() {
   };
 
   useEffect(() => {
+    if (!isLogin) return;
     const getuserdata = async () => {
+      setLoading(true)
       try {
         const res = await authFetch({ url: '/api/users/profile', method: 'get' });
         setProfileData(res.data.user);
       } catch (err) {
         console.log("Error fetching data:", err);
+
       } finally {
         setLoading(false);
       }
     }
     getuserdata()
-  }, [])
+  }, [isLogin])
 
   if (loading) {
     return (
-      <div className={`flex justify-center items-center min-h-screen font-normal text-2xl ${theme ? "text-white" : "text-black"}`}>
+      <div className={`flex justify-center items-center min-h-screen font-normal text-2xl ${theme ? "text-black" : "text-white"}`}>
         <p>Loading Profile...</p>
       </div>
     );

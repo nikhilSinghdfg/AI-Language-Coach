@@ -11,8 +11,12 @@ import { MdOutlineDarkMode, MdOutlineDelete } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { motion } from "framer-motion";
-import { useThemeContext } from '../../Context/ThemeContext.js'; 
+import { useThemeContext } from '../../Context/ThemeContext.js';
 import { RiUserSettingsLine } from "react-icons/ri";
+import { FiCreditCard } from "react-icons/fi";
+import { FiDownload } from "react-icons/fi";
+import { FaRegMessage } from "react-icons/fa6";
+
 
 function Setting() {
   const { isLogin } = useAppContext();
@@ -21,8 +25,11 @@ function Setting() {
   const settingsOptions = [
     { name: "Profile", icon: <FaRegUser />, link: "/components/Setting/ProfileSettings" },
     { name: "Appearance", icon: <MdOutlineDarkMode />, link: "/components/Setting/AppearanceSettings" },
-    { name: "Change Password", icon: <RiLockPasswordLine />, link: "/components/Setting/PasswordUpdate" },
+    { name: "Subscription", icon: <FiCreditCard />, link: "/components/Setting/Subscription" },
     { name: "Account Update", icon: <RiUserSettingsLine />, link: "/components/Setting/AccountSettings" },
+    { name: "Downloads", icon: <FiDownload />, link: "/components/Setting/Downloads" },
+    { name: "AI Chat Settings", icon: <FaRegMessage />, link: "/components/Setting/AiPreferences" },
+
   ];
 
   return (

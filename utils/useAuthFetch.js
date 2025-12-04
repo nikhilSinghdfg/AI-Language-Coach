@@ -1,4 +1,3 @@
-
 import { useAppContext } from "@/app/Context/UserContext";
 import api from "./api";
 import { useRouter } from "next/navigation";
@@ -10,12 +9,17 @@ export default function useAuthFetch() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const authFetch = async (options) => {
+  const authFetch = async ({ url, method = "GET", body = null, headers = {} }) => {
     setLoading(true);
 
     try {
-      // Try the request
-      const res = await api(options);
+      // ✅ axios expects `data` for request body
+      const res = await api({
+        url,
+        method,
+        data: body,
+        headers,
+      });
       setLoading(false);
       return res;
     } catch (error) {
@@ -25,11 +29,10 @@ export default function useAuthFetch() {
           const refreshRes = await api.get("/api/users/refresh");
           if (refreshRes.data.success) {
             // Retry original request
-            const retryRes = await api(options);
+            const retryRes = await api({ url, method, data: body, headers });
             setLoading(false);
             return retryRes;
           } else {
-            // Refresh token expired → logout
             logoutUser();
           }
         } catch (refreshError) {
@@ -42,7 +45,7 @@ export default function useAuthFetch() {
     }
   };
 
-  const logoutUser = async() => {
+  const logoutUser = async () => {
     await api.get("/api/users/logout");
     setIsLogin(false);
     setUserData(null);

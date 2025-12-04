@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema({
+
   username: {
     type: String,
     required: true,
     trim: true,
-    unique: true, // make username unique
   },
   email: {
     type: String,
@@ -23,7 +23,10 @@ const UserSchema = new mongoose.Schema({
   },
   verifyToken: String,
   verifyTokenExpiry: Date,
+
 });
+
+UserSchema.index({email:1},{unique:true})
 
 
 export const User = mongoose.models.users || mongoose.model("users", UserSchema)

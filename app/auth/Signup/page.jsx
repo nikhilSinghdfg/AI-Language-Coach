@@ -27,15 +27,17 @@ export default function Signup() {
 
   // 🚨 Corrected handle function
   const handleUser = (e) => {
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value,
-    });
+    setUser((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value.trim(),
+    }));
   };
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
+    if (loading) return;
+    
     if (!user.username || !user.email || !user.password) {
       return toast.error("Please fill all fields 📝");
     }
@@ -47,8 +49,7 @@ export default function Signup() {
       toast.success("Signup Successful 🎉");
       router.push("/auth/Login");
     } catch (error) {
-      console.error(error);
-      toast.error("Signup failed ⚠️ Try again");
+      toast.error(error.response?.data?.message||"Signup failed ⚠️ Try again");      
     } finally {
       setLoading(false);
     }

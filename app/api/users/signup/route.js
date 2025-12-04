@@ -5,6 +5,7 @@ import bcryptjs from "bcryptjs";
 
 
 DBconnect()
+
 export async function POST(req) {
     try {
         const reqBody = await req.json()
@@ -12,13 +13,13 @@ export async function POST(req) {
 
         console.log(reqBody);
 
-        const user =await User.findOne({ email })
+        const user = await User.findOne({ email })
 
         if (user) {
-            return NextResponse.json({
-                error: "User already exist",
-                status: 400
-            })
+            return NextResponse.json(
+                { success: false, message: "User already have an account" },
+                { status: 400 }
+            );
         }
 
         const hashedPassword = await bcryptjs.hash(password, 10)
@@ -33,11 +34,10 @@ export async function POST(req) {
         console.log(savedUser);
 
 
-        return NextResponse.json({
-            message: "User Created Successfully",
-            success: true,
-            savedUser
-        })
+        return NextResponse.json(
+            { success: true, message: "User Created Successfully" },
+            { savedUser }
+        )
 
 
 

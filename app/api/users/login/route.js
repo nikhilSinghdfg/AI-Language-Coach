@@ -1,89 +1,4 @@
-/*
 
-import { DBconnect } from "../../../../utils/dbConfig";
-import { User } from "../../../../models/userModel";
-import bcryptjs from "bcryptjs";
-import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-
-
-DBconnect()
-
-export async function POST(req) {
-    try {
-
-        const reqBody = await req.json();
-        const { email, password } = reqBody;
-        console.log(reqBody);
-
-
-
-        const user = await User.findOne({ email })
-
-        if (!user) {
-            return NextResponse.json(
-                {
-                    message: "user not exist",
-                },
-                {
-                    status: 400
-                }
-            )
-        }
-        console.log('user exist');
-
-        const validPassword = await bcryptjs.compare(password, user.password)
-
-        if (!validPassword) {
-            return NextResponse.json({ error: "Invalid password" }, { status: 400 })
-        }
-        console.log(user);
-
-
-        const tokenData = {
-            id: user._id,
-            username: user.username,
-            email: user.email
-        }
-
-
-        const accessToken = await jwt.sign(tokenData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" })
-        const refreshToken = await jwt.sign(tokenData, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "15d" })
-
-
-        const response = NextResponse.json(
-            {
-                message: "Login successful",
-                success: true,
-                user: {
-                    email: user.email,
-                    username: user.username,
-                },
-            },
-            {
-                status: 200
-            }
-        )
-
-
-
-
-
-        response.cookies.set("accessToken", accessToken, { httpOnly: true, secure: isProd, maxAge: 60 * 60 * 24 });
-        response.cookies.set("refreshToken", refreshToken, { httpOnly: true, secure: isProd, maxAge: 60 * 60 * 24 * 15 });
-
-
-        console.log(response, "logged in user");
-
-        return response
-
-    } catch (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
-
-    }
-}
-
-*/
 
 // File: /app/api/auth/login/route.js
 import { DBconnect } from "../../../../utils/dbConfig";
@@ -107,16 +22,25 @@ export async function POST(req) {
       );
     }
 
+
+
+
     // 2️⃣ Find user in DB
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: "Invalid email" },
+        { status: 400 }
+      );
     }
 
     // 3️⃣ Compare password
     const isValidPassword = await bcryptjs.compare(password, user.password);
     if (!isValidPassword) {
-      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+     return NextResponse.json(
+        { success: false, message: "Invalid password" },
+        { status: 400 }
+      );
     }
 
     // 4️⃣ Prepare token payload

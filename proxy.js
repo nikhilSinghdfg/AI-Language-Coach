@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
 
 export function proxy(req) {
-  const path = req.nextUrl.pathname;
+  const path = req.nextUrl.pathname; //request current url path/current page
   const accessToken = req.cookies.get('accessToken')?.value;
 
   if (!accessToken) {
     return NextResponse.next();
   }
 
-  const publicPaths = ['/auth/Login', '/auth/Signup', '/auth/VerifyEmail'];
-  const isPublicPage = publicPaths.some(p => path.startsWith(p));
+  const publicPaths = ['/auth/Login', '/auth/Signup', '/auth/VerifyEmail']; //pages that dont require login, without login anyone can access it
+  const isPublicPage = publicPaths.some(p => path.startsWith(p)); //check the current page is form this publicPaths  by using path 
 
 
 

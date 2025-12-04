@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { DBconnect } from "../../../../utils/dbConfig";
+import { cookies } from "next/headers";
+
+DBconnect()
 
 export async function GET(req) {
     try {
         const refreshToken = req.cookies.get("refreshToken")?.value;
+    //const cookieStore = cookies();
+    //   const refreshToken =cookieStore.get("refreshToken")?.value;
+
 
         if (!refreshToken) {
             return NextResponse.json(

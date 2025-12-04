@@ -90,7 +90,7 @@ function SideBar() {
         <button
           onClick={LogoutFun}
           className={`
-            w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-colors duration-200
+            w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-colors duration-200 cursor-pointer
             ${theme
               ? "bg-red-900/30 text-red-300 hover:bg-red-800 hover:text-white"
               : "bg-red-50 text-red-700 hover:bg-red-100"

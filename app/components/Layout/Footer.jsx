@@ -1,13 +1,17 @@
 import React from 'react';
-import { useThemeContext } from "../../Context/ThemeContext";
-
+import { useAppContext } from '../../Context/UserContext';
+import { useThemeContext } from '../../Context/ThemeContext';
 function Footer() {
-  const { theme } = useThemeContext();
+    const { isLogin, userData, loading } = useAppContext();
+    const { theme } = useThemeContext();
+
+
+    if (loading) return;
 
   return (
    <footer
       className={`
-        fixed bottom-0 left-64 right-0 h-12 w-[calc(100%-16rem)] sm:w-[calc(100%-16rem)] w-full
+        fixed bottom-0  ${isLogin?"left-64  ":"left-0 right-0 px-3 pr-5 w-screen"} right-0 h-12   
         border-l border-t shadow-md
         ${theme ? "bg-gray-900 border-gray-700 text-white" : "bg-gray-100 border-gray-300 text-black"}
       `}

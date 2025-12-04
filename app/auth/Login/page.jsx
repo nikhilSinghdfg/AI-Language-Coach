@@ -20,13 +20,15 @@ export default function Login() {
 
 
   const handleChange = (e) => {
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value,
-    });
+    setUser((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value.trim(),
+    }));
   };
 
   const handleLogin = async (e) => {
+    if (loading) return;
+
     e.preventDefault();
     if (!user.email || !user.password) {
       return toast.error("Please fill all fields 📝");
@@ -44,6 +46,7 @@ export default function Login() {
       router.push("/pages/Dashboard");
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed ⚠️ Try again");
+
     } finally {
       setLoading(false);
     }
